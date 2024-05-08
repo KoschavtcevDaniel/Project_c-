@@ -31,22 +31,22 @@
 
 
 
-create or replace function insert_decoding() returns trigger as $ad_fi_trigger$
+create or replace function insert_contract() returns trigger as $ad_fi_trigger$
 begin
-update decoding set sum_inf = sum_inf + (new.price*new.count_inf) where id_info = new.id_n; 
+update contract set sum_cnt = sum_cnt + new.sum_dec where id_cnt = new.id_cnt; 
 return Null;
 end
 $ad_fi_trigger$ Language plpgsql;
 
-create trigger ins_dec after insert on decoding
-for each row execute procedure insert_decoding();
+create trigger ins_cnt after insert on contract
+for each row execute procedure insert_contract();
 
-create or replace function delete_decoding() returns trigger as $ad_fi_trigger$
+create or replace function delete_contract() returns trigger as $ad_fi_trigger$
 begin
-update decoding set sum_inf = sum_inf - old.price*old.count_inf where id = old.id_n; 
+update contract set sum_cnt = sum_cnt - old.sum_dec where id_cnt = new.id_cnt; 
 return Null;
 end
 $ad_fi_trigger$ Language plpgsql;
 
-create trigger del_dec after delete on decoding
-for each row execute procedure delete_decoding();
+create trigger del_cnt after delete on contract
+for each row execute procedure delete_contract();
